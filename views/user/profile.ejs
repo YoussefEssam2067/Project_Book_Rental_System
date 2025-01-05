@@ -1,0 +1,69 @@
+<%- include('../partials/headerProfile') %>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3 class="card-title text-center mb-4">Profile</h3>
+
+          <!-- Profile Image -->
+          <div class="mb-4">
+            <img
+              src="/uploads/profiles/<%= user.avatar %>"
+              alt="Profile Picture"
+              class="img-fluid rounded-circle"
+              style="width: 150px; height: 150px; object-fit: cover"
+            />
+          </div>
+
+          <!-- User Info -->
+          <div class="mb-3"><strong>Bio:</strong> <%= user.bio %></div>
+          <div class="mb-3"><strong>Full Name:</strong> <%= user.name %></div>
+          <div class="mb-3"><strong>Email:</strong> <%= user.email %></div>
+          <div class="mb-3"><strong>Address:</strong> <%= user.address %></div>
+          <div class="mb-3"><strong>Phone:</strong> <%= user.phone %></div>
+          <div class="mb-3"><strong>Age:</strong> <%= user.age %></div>
+
+          <!-- My Posts Button -->
+          <form action="/profile/books" method="GET" id="editProfilePage-form">
+            <div class="d-grid mb-3">
+              <button class="btn btn-primary" id="updateButton">
+                My Books
+              </button>
+            </div>
+          </form>
+
+          <form action="/rentals" method="GET" id="rentalsPage-form">
+            <div class="d-grid mb-3">
+              <button class="btn btn-primary" id="updateButton">
+                My Rentals
+              </button>
+            </div>
+          </form>
+
+          <!-- Update Profile Button -->
+          <form
+            action="/profile/edit-info"
+            method="GET"
+            id="editProfilePage-form"
+          >
+            <div class="d-grid">
+              <button class="btn btn-primary" id="updateButton">
+                Update Profile
+              </button>
+            </div>
+          </form>
+
+          <!-- Log Out Button -->
+          <form action="/logout" method="GET" id="loginPage-form">
+            <div class="d-grid mt-3">
+              <button class="btn btn-primary" id="updateButton">Log Out</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,82 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1 class="text-center">Edit Review for: <%= book.title %></h1>
+
+  <form action="/reviews/<%= review.id %>/edit" method="POST" class="mt-4">
+    <div class="mb-3">
+      <label for="rating" class="form-label">Rating (0-5)</label>
+      <div id="star-rating" class="star-rating">
+        <% for (let i = 1; i <= 5; i++) { %>
+        <span class="star" data-value="<%= i %>" title="<%= i %> Stars">
+          &#9733;
+        </span>
+        <% } %>
+      </div>
+      <input
+        type="hidden"
+        id="rating"
+        name="rating"
+        value="<%= review.rating %>"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="review" class="form-label">Your Review</label>
+      <textarea
+        class="form-control"
+        id="review"
+        name="review"
+        rows="4"
+        placeholder="Write your thoughts about this book..."
+      >
+<%= review.review %></textarea
+      >
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Review</button>
+  </form>
+
+  <a href="/books/<%= book.id %>" class="btn btn-secondary mt-3"
+    >Back to Book</a
+  >
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll("#star-rating .star");
+    const ratingInput = document.querySelector("#rating");
+
+    stars.forEach((star) => {
+      // Handle mouse over
+      star.addEventListener("mouseover", () => {
+        const value = parseInt(star.dataset.value, 10);
+        fillStars(value);
+      });
+
+      // Handle mouse out
+      star.addEventListener("mouseout", () => {
+        const currentRating = parseInt(ratingInput.value, 10) || 0;
+        fillStars(currentRating);
+      });
+
+      // Handle click
+      star.addEventListener("click", () => {
+        const value = parseInt(star.dataset.value, 10);
+        ratingInput.value = value; // Set the hidden input value
+      });
+    });
+
+    // Fill stars up to a given value
+    function fillStars(value) {
+      stars.forEach((star) => {
+        star.classList.toggle(
+          "filled",
+          parseInt(star.dataset.value, 10) <= value
+        );
+      });
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,87 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1 class="text-center">Create New Book</h1>
+
+  <form
+    action="/books/new"
+    method="POST"
+    class="mt-4"
+    enctype="multipart/form-data"
+  >
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        value="<%= formData?.title || '' %>"
+        placeholder="Enter book title"
+      />
+      <% if (errors?.title) { %>
+      <div class="text-danger"><%= errors.title %></div>
+      <% } %>
+    </div>
+
+    <div class="mb-3">
+      <label for="author" class="form-label">Author</label>
+      <input
+        type="text"
+        class="form-control"
+        id="author"
+        name="author"
+        value="<%= formData?.author || '' %>"
+        placeholder="Enter author name"
+      />
+      <% if (errors?.author) { %>
+      <div class="text-danger"><%= errors.author %></div>
+      <% } %>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="5"
+        placeholder="Write a brief description of the book"
+      >
+<%= formData?.description || '' %></textarea
+      >
+      <% if (errors?.description) { %>
+      <div class="text-danger"><%= errors.description %></div>
+      <% } %>
+    </div>
+
+    <div class="mb-3">
+      <label for="thumbnail" class="form-label">Select Thumbnail</label>
+      <input type="file" class="form-control" name="thumbnail" id="thumbnail" />
+      <% if (errors?.thumbnail) { %>
+      <div class="text-danger"><%= errors.thumbnail %></div>
+      <% } %>
+    </div>
+
+    <div class="mb-3">
+      <label for="pdf" class="form-label">Upload PDF</label>
+      <input type="file" class="form-control" id="pdf" name="pdf" />
+      <% if (errors?.pdf) { %>
+      <div class="text-danger"><%= errors.pdf %></div>
+      <% } %>
+    </div>
+
+    <!-- Image input for gallery -->
+    <div class="mb-3">
+      <label for="url" class="form-label">Select Images for Gallery</label>
+      <input type="file" class="form-control" name="url" id="url" multiple />
+      <% if (errors?.url) { %>
+      <div class="text-danger"><%= errors.url %></div>
+      <% } %>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit Book</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

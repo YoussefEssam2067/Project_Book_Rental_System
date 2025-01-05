@@ -1,0 +1,40 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1 class="text-center">Rent Book: <%= book.title %></h1>
+
+  <!-- Display error message if present -->
+  <% if (typeof error !== 'undefined') { %>
+  <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <form action="/books/<%= book.id %>/rent" method="POST">
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Start Date and Time</label>
+      <input
+        type="datetime-local"
+        class="form-control"
+        id="startDate"
+        name="startDate"
+        required
+        min="<%= new Date().toISOString().slice(0, 16) %>"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="endDate" class="form-label">End Date and Time</label>
+      <input
+        type="datetime-local"
+        class="form-control"
+        id="endDate"
+        name="endDate"
+        required
+        min="<%= new Date().toISOString().slice(0, 16) %>"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-success">Rent Book</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

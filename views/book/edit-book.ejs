@@ -1,0 +1,154 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1>Edit Book</h1>
+  <form
+    action="/books/<%= book.id %>/edit-book"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <!-- Book Title -->
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        value="<%= book.title %>"
+        required
+      />
+    </div>
+
+    <!-- Book Author -->
+    <div class="mb-3">
+      <label for="author" class="form-label">Author</label>
+      <input
+        type="text"
+        class="form-control"
+        id="author"
+        name="author"
+        value="<%= book.author %>"
+        required
+      />
+    </div>
+
+    <!-- Book Description -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="5"
+        required
+      >
+<%= book.description %></textarea
+      >
+    </div>
+
+    <!-- Book Thumbnail -->
+    <div class="mb-3">
+      <label for="thumbnail" class="form-label">Thumbnail</label>
+      <input
+        type="file"
+        class="form-control"
+        id="thumbnail"
+        name="thumbnail"
+        accept="image/*"
+      />
+      <% if (book.thumbnail) { %>
+      <div class="mt-3">
+        <p>Current Thumbnail:</p>
+        <img
+          src="/uploads/books/thumbnails/<%= book.thumbnail %>"
+          alt="Book Thumbnail"
+          class="img-thumbnail"
+          style="max-width: 100%; height: auto"
+        />
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Book PDF -->
+    <div class="mb-3">
+      <label for="pdf" class="form-label">PDF</label>
+      <input
+        type="file"
+        class="form-control"
+        id="pdf"
+        name="pdf"
+        accept="application/pdf"
+      />
+      <% if (book.pdf) { %>
+      <div class="mt-3">
+        <p>Current PDF:</p>
+        <a href="/uploads/books/files/<%= book.pdf %>" target="_blank"
+          >View Current PDF</a
+        >
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Additional Images -->
+    <div class="mb-3">
+      <label for="url" class="form-label">Additional Images</label>
+      <input
+        type="file"
+        class="form-control"
+        id="url"
+        name="url"
+        accept="image/*"
+        multiple
+      />
+      <% if (book.BookImages && book.BookImages.length > 0) { %>
+      <div class="mt-3">
+        <p>Current Images:</p>
+        <div
+          id="carouselBook<%= book.id %>"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <% book.BookImages.forEach((image, index) => { %>
+            <div
+              class="text-center carousel-item <%= index === 0 ? 'active' : '' %>"
+            >
+              <img
+                src="/uploads/books/images/<%= image.url %>"
+                alt="Book Image"
+                class="img-thumbnail"
+                style="max-width: 100%; height: auto; margin-bottom: 10px"
+              />
+            </div>
+            <% }) %>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselBook<%= book.id %>"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselBook<%= book.id %>"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-success mb-3">Update Book</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

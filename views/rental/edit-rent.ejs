@@ -1,0 +1,38 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1 class="text-center">Edit Rental</h1>
+
+  <% if (error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <form action="/rentals/<%= rental.id %>/edit" method="POST">
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <input
+        type="datetime-local"
+        id="startDate"
+        name="startDate"
+        class="form-control"
+        value="<%= new Date(new Date(rental.startDate).setHours(new Date(rental.startDate).getHours() + 2)).toISOString().slice(0, -1) %>"
+        required
+      />
+    </div>
+    <div class="form-group mt-3">
+      <label for="endDate">End Date:</label>
+      <input
+        type="datetime-local"
+        id="endDate"
+        name="endDate"
+        class="form-control"
+        value="<%= new Date(new Date(rental.endDate).setHours(new Date(rental.endDate).getHours() + 2)).toISOString().slice(0, -1) %>"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary mt-4">Save Changes</button>
+    <a href="/rentals" class="btn btn-secondary mt-4">Cancel</a>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

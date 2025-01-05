@@ -1,0 +1,77 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1 class="text-center">All Books</h1>
+
+  <% if (books && books.length > 0) { %>
+  <div class="row mt-4">
+    <% books.forEach(book => { %>
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">
+            <a href="/books/<%= book.id %>"><%= book.title %></a>
+          </h3>
+          <p class="card-text"><%= book.description.substring(0, 50) %>...</p>
+
+          <img
+            src="/uploads/books/thumbnails/<%= book.thumbnail %>"
+            class="d-block w-100"
+            alt="Book Image"
+            style="max-height: 200px; object-fit: cover"
+          />
+
+          <small class="text-muted">
+            Published by <%= book.User ? book.User.name : "Unknown" %> on <%=
+            book.createdAt.toLocaleString() %>
+          </small>
+          <div class="mt-2">
+            <a href="/books/<%= book.id %>" class="btn btn-primary btn-sm"
+              >Read More</a
+            >
+            <% if (book.userId === userId) { %>
+            <form
+              action="/books/<%= book.id %>/edit"
+              method="GET"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+            </form>
+            <form
+              action="/books/<%= book.id %>/delete"
+              method="POST"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-danger btn-sm">
+                Delete
+              </button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <!-- Pagination Buttons -->
+  <div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"
+            ><%= i %></a
+          >
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+
+  <% } else { %>
+  <p class="text-center">No Books available.</p>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

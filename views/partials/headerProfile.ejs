@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css"
+      integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      /* Make the previous and next icons black */
+      .carousel-control-prev-icon,
+      .carousel-control-next-icon {
+        background-color: black; /* Set the icons to black */
+        border-radius: 50%; /* Optional: make them circular */
+        width: 40px; /* Adjust size */
+        height: 40px;
+      }
+
+      /* Optional: Add hover effect for the icons */
+      .carousel-control-prev-icon:hover,
+      .carousel-control-next-icon:hover {
+        opacity: 0.8; /* Slightly fade on hover */
+      }
+
+      .star-rating {
+        display: inline-flex;
+        cursor: pointer;
+      }
+
+      .star {
+        font-size: 2rem;
+        color: #ddd; /* Default unselected color */
+        transition: color 0.2s ease;
+      }
+
+      .star.filled {
+        color: #ffc107; /* Filled star color */
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="navbar bg-dark navbar-expand-lg bg-body-tertiary"
+      data-bs-theme="dark"
+    >
+      <div class="container-fluid">
+        <!-- Brand and Hello Message -->
+        <a class="navbar-brand" href="/books">Book Rental System</a>
+        <% if (userName) { %>
+        <span class="navbar-text text-white ms-3">
+          Hello, <%= userName %>!
+        </span>
+        <% } %>
+
+        <!-- Toggler for Mobile View -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/books"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/books/new">Add Book</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Log Out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>

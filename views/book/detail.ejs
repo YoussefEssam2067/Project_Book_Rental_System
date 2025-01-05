@@ -1,0 +1,229 @@
+<%- include('../partials/headerProfile') %>
+
+<div class="container mt-5">
+  <h1 class="text-center">Book Details</h1>
+
+  <!-- Book Details Section -->
+  <div class="card mb-4">
+    <div class="card-header d-flex align-items-center">
+      <img
+        src="/uploads/books/thumbnails/<%= book.thumbnail %>"
+        alt="<%= book.title %>"
+        style="height: 200px; margin-right: 20px"
+      />
+      <div>
+        <h2><%= book.title %></h2>
+        <p><strong>Author:</strong> <%= book.author %></p>
+        <p>
+          <strong>Publisher:</strong> <%= book.User ? book.User.name : 'Unknown'
+          %>
+        </p>
+        <p>
+          <strong>Published:</strong>
+          <%= new Date(book.createdAt).toLocaleDateString("en-US", { year:
+          "numeric", month: "long", day: "numeric", hour: "2-digit", minute:
+          "2-digit", second: "2-digit", hour12: true }) %>
+        </p>
+        <p>
+          <strong>Average Rating:</strong>
+          <%= book.Ratings && book.Ratings.length > 0 ?
+          (book.Ratings.reduce((sum, r) => sum + r.rating, 0) /
+          book.Ratings.length).toFixed(1) : 'No ratings yet' %>
+        </p>
+        <p>
+          <strong>Description:</strong> <%= book.description ? book.description
+          : 'No description available.' %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book Images Section -->
+  <% if (book.BookImages && book.BookImages.length > 0) { %>
+  <div class="mb-4">
+    <h3>Book Images</h3>
+    <div
+      id="carouselBookImages"
+      class="carousel slide"
+      style="max-width: 800px; margin: auto"
+    >
+      <div class="carousel-inner">
+        <% book.BookImages.forEach((image, index) => { %>
+        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+          <img
+            src="/uploads/books/images/<%= image.dataValues.url %>"
+            alt="Book Image"
+            class="img-fluid d-block mx-auto book-image"
+          />
+        </div>
+        <% }); %>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselBookImages"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselBookImages"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- Rent Button Section -->
+  <% if (book.userId !== userId) { %>
+  <div class="text-center">
+    <form action="/books/<%= book.id %>/rent" method="GET">
+      <button type="submit" class="btn btn-success">Rent Book</button>
+    </form>
+  </div>
+  <% } %>
+
+  <!-- Leave a Review Section (Visible only if rental is completed) -->
+  <% if (rental) { %>
+  <h2>Leave a Review</h2>
+  <form action="/books/<%= book.id %>/reviews" method="POST" class="mb-4">
+    <div class="mb-3">
+      <label for="rating" class="form-label">Rating (0-5)</label>
+      <div id="star-rating" class="star-rating">
+        <% for (let i = 1; i <= 5; i++) { %>
+        <span class="star" data-value="<%= i %>" title="<%= i %> Stars">
+          &#9733;
+        </span>
+        <% } %>
+      </div>
+      <input type="hidden" id="rating" name="rating" value="0" />
+    </div>
+
+    <div class="mb-3">
+      <label for="review" class="form-label">Review:</label>
+      <textarea
+        id="review"
+        name="review"
+        rows="4"
+        class="form-control"
+      ></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit Review</button>
+  </form>
+  <% } else { %>
+  <p class="text-muted">
+    You can only leave a review after finishing the rental.
+  </p>
+  <% } %>
+
+  <!-- Reviews Section -->
+  <h2>Reviews</h2>
+  <% if (book.Ratings && book.Ratings.length > 0) { %>
+  <ul class="list-group">
+    <% const userReviews = {}; %> <% book.Ratings.forEach(review => { if
+    (!userReviews[review.User.id]) { userReviews[review.User.id] = { user:
+    review.User.name, reviews: [] }; }
+    userReviews[review.User.id].reviews.push(review); }); %> <%
+    Object.values(userReviews).forEach(userReview => { %>
+    <li class="list-group-item">
+      <h4><%= userReview.user %></h4>
+      <% userReview.reviews.forEach(r => { %>
+      <p>
+        <strong>Rating:</strong>
+        <% for (let i = 1; i <= 5; i++) { %>
+        <i class="fa fa-star<%= i <= r.rating ? ' text-warning' : '' %>"></i>
+        <% } %>
+      </p>
+      <p><%= r.review %></p>
+      <small class="text-muted">
+        Reviewed on <%= new Date(r.createdAt).toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute:
+        "2-digit", second: "2-digit", hour12: true }) %>
+      </small>
+
+      <!-- Edit and Delete Review buttons (Visible only if the current user is the author) -->
+      <% if (r.User.id === userId) { %>
+      <a href="/reviews/<%= r.id %>/edit" class="btn btn-warning btn-sm"
+        >Edit</a
+      >
+      <form
+        action="/reviews/<%= r.id %>/delete"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+      <% } %> <% }); %>
+    </li>
+    <% }); %>
+  </ul>
+  <% } else { %>
+  <p class="text-muted">No reviews yet. Be the first to leave one!</p>
+  <% } %>
+</div>
+
+<style>
+  .book-image {
+    display: block;
+    margin: auto;
+  }
+  .carousel-control-prev,
+  .carousel-control-next {
+    margin-top: 50px; /* Adjust this value to add margin to the arrows */
+    width: 5%; /* Optionally reduce the width of the clickable area */
+  }
+
+  .carousel-control-prev {
+    left: -50px; /* Move the left arrow outward */
+  }
+
+  .carousel-control-next {
+    right: -50px; /* Move the right arrow outward */
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll("#star-rating .star");
+    const ratingInput = document.querySelector("#rating");
+
+    stars.forEach((star) => {
+      // Handle mouse over
+      star.addEventListener("mouseover", () => {
+        const value = parseInt(star.dataset.value, 10);
+        fillStars(value);
+      });
+
+      // Handle mouse out
+      star.addEventListener("mouseout", () => {
+        const currentRating = parseInt(ratingInput.value, 10) || 0;
+        fillStars(currentRating);
+      });
+
+      // Handle click
+      star.addEventListener("click", () => {
+        const value = parseInt(star.dataset.value, 10);
+        ratingInput.value = value; // Set the hidden input value
+      });
+    });
+
+    // Fill stars up to a given value
+    function fillStars(value) {
+      stars.forEach((star) => {
+        star.classList.toggle(
+          "filled",
+          parseInt(star.dataset.value, 10) <= value
+        );
+      });
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>
